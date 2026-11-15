@@ -21,7 +21,7 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 .filters{padding:16px;margin:12px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 14px}
 .filters label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .filters select,.filters input[type=number]{border:2px solid var(--line);background:var(--bg);border-radius:12px;min-height:46px;padding:0 10px;font-size:16px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink);width:100%}
-.cities{grid-column:1/-1}.srch{grid-column:1/-1}.filters input[type=search]{border:2px solid var(--line);background:var(--bg);border-radius:12px;min-height:50px;padding:0 12px;font-size:17px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink);width:100%}
+.cities{grid-column:1/-1}.srch{grid-column:1/-1}.filters input[type=text],.filters input[type=search]{border:2px solid var(--line);background:var(--bg);border-radius:12px;min-height:50px;padding:0 12px;font-size:17px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink);width:100%}
 .cities summary{cursor:pointer;font-weight:900;padding:6px 0;font-size:16px}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:0 14px;min-height:40px;font-weight:700;font-size:15px}
@@ -152,7 +152,7 @@ function render(){
  const cityList=Object.keys(cityCounts).sort();
  let h='<h1>'+esc(t("h1"))+'</h1><p class="sub">'+esc(t("sub"))+'</p><div class="note">'+esc(t("disc"))+'</div>';
  h+='<div class="card filters"><label class="srch">'+t("f_search")+'<input id="fq" type="search" list="commlist" autocomplete="off" value="'+esc(S.q)+'" placeholder="'+esc(t("f_search_ph"))+'"><datalist id="commlist">'+[...new Set(ALL.map(x=>x.comm))].sort().map(c=>'<option value="'+esc(c)+'">').join("")+'</datalist></label>'
- +'<label>'+t("f_price")+'<select id="fp">'+opts([[0,t("any")],[200000,"$200,000"],[250000,"$250,000"],[300000,"$300,000"],[350000,"$350,000"],[400000,"$400,000"],[500000,"$500,000"]],S.price)+'</select></label>'
+ +'<label>'+t("f_price")+'<input id="fp" type="text" inputmode="numeric" autocomplete="off" list="pricelist" placeholder="'+esc(t("any"))+'" value="'+(S.price?usd(S.price):"")+'"><datalist id="pricelist">'+[200000,250000,300000,350000,400000,500000].map(v=>'<option value="'+usd(v)+'">').join("")+'</datalist></label>'
  +'<label>'+t("f_beds")+'<select id="fb">'+opts([[0,t("any")],[3,t("b3")],[4,t("b4")],[5,t("b5")]],S.beds)+'</select></label>'
  +'<label>'+t("f_close")+'<select id="fc">'+opts([[0,t("mo_any")],[3,t("mo",{n:3})],[6,t("mo",{n:6})],[9,t("mo",{n:9})],[12,t("mo",{n:12})]],S.close)+'</select></label>'
  +'<label>'+t("f_lease")+'<select id="fl">'+opts([[0,t("mo0")],[1,t("mo1")],[2,t("mo",{n:2})],[3,t("mo",{n:3})]],S.lease)+'</select></label>'
@@ -181,7 +181,7 @@ function render(){
  $("#foot").innerHTML='<div class="contact"><b>'+esc(t("c_h"))+'</b><br>'+esc(t("c_p"))+'<br><br>'+CONTACT.name+'<br><a href="tel:+18307437270" dir="ltr">'+CONTACT.phone+'</a> · <a href="mailto:'+CONTACT.email+'" dir="ltr">'+CONTACT.email+'</a></div><div>'+esc(t("upd",{d:D.updated}))+' · <a href="'+SHEET_URL+'" target="_blank" rel="noopener">'+esc(t("sheet"))+'</a></div>';
  const bind=(id,k,num)=>{const e=$(id);if(e)e.onchange=()=>{S[k]=num?+e.value:e.value;S.limit=30;save();render()}};
  const fq=$("#fq");if(fq)fq.oninput=()=>{S.q=fq.value;S.limit=30;save();const p=fq.selectionStart;render();const n=$("#fq");if(n){n.focus();try{n.setSelectionRange(p,p)}catch(e){}}};
- bind("#fp","price",1);bind("#fb","beds",1);bind("#fc","close",1);bind("#fl","lease",1);bind("#fr","rent",1);bind("#fy","minY",1);bind("#fs","sort",0);
+ const fp=$("#fp");if(fp)fp.onchange=()=>{let v=fp.value.trim().toLowerCase().replace(/[$,\s]/g,"");let n=parseFloat(v)||0;if(/k$/.test(v))n*=1000;else if(/m$/.test(v))n*=1e6;S.price=Math.max(0,Math.round(n));S.limit=30;save();render()};bind("#fb","beds",1);bind("#fc","close",1);bind("#fl","lease",1);bind("#fr","rent",1);bind("#fy","minY",1);bind("#fs","sort",0);
  document.querySelectorAll("[data-city]").forEach(b=>b.onclick=()=>{const c=b.dataset.city;S.cities=S.cities.includes(c)?S.cities.filter(x=>x!==c):S.cities.concat(c);S.limit=30;save();render();const d=$(".cities");if(d)d.open=true});
  const cl=$("#clr");if(cl)cl.onclick=()=>{S.cities=[];save();render()};
  const mr=$("#more");if(mr)mr.onclick=()=>{S.limit+=30;render()};
