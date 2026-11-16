@@ -73,7 +73,7 @@ cities:"Cities",cities_n:"Cities ({n} selected)",clear:"Clear cities",months:"Cl
 n_homes:"{n} home|{n} homes",shown:"showing {n}",none:"No homes match. Try widening the filters.",
 yield:"Gross yield",rent:"Est. rent / mo",price:"Price",close:"Closing",first:"First rent",y1:"Income, first 12 mo",
 ready:"Ready now",est:"Estimated",dropped:"Price dropped {x}",low_conf:"Rent estimated from nearby area",
-beds:"{b} bd · {ba} ba · {sf} sq ft",view:"View community ↗",more:"Show {n} more",
+beds:"{b} bd · {ba} ba · {sf} sq ft",planline:"Plan: {p} · {fl}",story:"1 story|{n} stories",view:"View community ↗",more:"Show {n} more",
 meth_h:"How the numbers are calculated",
 meth:["Estimated rent: average monthly rent for houses of that bedroom count in the city (Rentometer, Oct 2025 – Jun 2026), then adjusted by the rent assumption you choose. Homes with 5 or more bedrooms use the 4+ bedroom figure plus 12%. Rent is also scaled up or down (at most 12% up, 15% down) for homes larger or smaller than the typical home with the same bedrooms.","Gross yield: estimated annual rent divided by price. Taxes, insurance, vacancy after the first lease, management and repairs are not included.","Closing: the estimated closing date for each home. Rent starts after closing plus the time you pick to find a tenant.","Income, first 12 months: rent for the months after rent starts, within 12 months of closing."],
 conf_h:"Where rent data comes from",conf_city:"City data",conf_proxy:"Estimated from nearby: {x}",
@@ -90,7 +90,7 @@ cities:"Ciudades",cities_n:"Ciudades ({n} seleccionadas)",clear:"Borrar ciudades
 n_homes:"{n} casa|{n} casas",shown:"mostrando {n}",none:"Ninguna casa coincide. Amplíe los filtros.",
 yield:"Rend. bruto",rent:"Renta est. / mes",price:"Precio",close:"Cierre",first:"Primera renta",y1:"Ingreso, primeros 12 meses",
 ready:"Lista ya",est:"Estimado",dropped:"Bajó de precio {x}",low_conf:"Renta estimada de zona cercana",
-beds:"{b} rec · {ba} baños · {sf} pies²",view:"Ver comunidad ↗",more:"Mostrar {n} más",
+beds:"{b} rec · {ba} baños · {sf} pies²",planline:"Modelo: {p} · {fl}",story:"1 piso|{n} pisos",view:"Ver comunidad ↗",more:"Mostrar {n} más",
 meth_h:"Cómo se calculan los números",
 meth:["Renta estimada: promedio mensual de casas con ese número de recámaras en la ciudad (Rentometer, oct 2025 – jun 2026), ajustado según el supuesto que elija. Las casas de 5 o más recámaras usan la cifra de 4+ más 12%. La renta también se ajusta según el tamaño de la casa frente a una típica con las mismas recámaras (máx. 12% más, 15% menos).","Rendimiento bruto: renta anual estimada dividida entre el precio. No incluye impuestos, seguro, vacancia posterior, administración ni reparaciones.","Cierre: fecha estimada de cierre de cada casa. La renta empieza después del cierre más el tiempo que elija para hallar inquilino.","Ingreso de los primeros 12 meses: renta de los meses posteriores al inicio de renta, dentro de 12 meses desde el cierre."],
 conf_h:"Origen de los datos de renta",conf_city:"Datos de la ciudad",conf_proxy:"Estimado de zona cercana: {x}",
@@ -107,7 +107,7 @@ cities:"ערים",cities_n:"ערים ({n} נבחרו)",clear:"נקה ערים",m
 n_homes:"בית {n}|{n} בתים",shown:"מוצגים {n}",none:"לא נמצאו בתים. נסו להרחיב את הסינון.",
 yield:"תשואה ברוטו",rent:"שכירות משוערת / חודש",price:"מחיר",close:"סגירה",first:"שכירות ראשונה",y1:"הכנסה ב-12 חודשים ראשונים",
 ready:"מוכן עכשיו",est:"משוער",dropped:"המחיר ירד {x}",low_conf:"שכירות משוערת מאזור סמוך",
-beds:"{b} חד׳ שינה · {ba} מקלחות · {sf} רגל²",view:"לצפייה בשכונה ↗",more:"הצג עוד {n}",
+beds:"{b} חד׳ שינה · {ba} מקלחות · {sf} רגל²",planline:"דגם: {p} · {fl}",story:"קומה אחת|{n} קומות",view:"לצפייה בשכונה ↗",more:"הצג עוד {n}",
 meth_h:"איך המספרים מחושבים",
 meth:["שכירות משוערת: ממוצע שכירות חודשית לבתים עם אותו מספר חדרי שינה בעיר (Rentometer, אוקטובר 2025 – יוני 2026), ומותאם להנחה שבחרתם. בתים עם 5 חדרי שינה ומעלה מחושבים לפי נתון 4+ ועוד 12%. השכירות מותאמת גם לגודל הבית לעומת בית טיפוסי עם אותו מספר חדרים (עד 12% יותר או 15% פחות).","תשואה ברוטו: שכירות שנתית משוערת חלקי המחיר. לא כולל מס נכס, ביטוח, תקופות ללא שוכר לאחר החוזה הראשון, ניהול ותיקונים.","סגירה: תאריך הסגירה המשוער של כל בית. השכירות מתחילה אחרי הסגירה ועוד הזמן שבחרתם למציאת שוכר.","הכנסה ב-12 חודשים ראשונים: שכירות עבור החודשים שאחרי תחילת השכירות, בתוך 12 חודשים מהסגירה."],
 conf_h:"מקור נתוני השכירות",conf_city:"נתוני העיר",conf_proxy:"הערכה לפי אזור סמוך: {x}",
@@ -142,7 +142,7 @@ function prep(){if(!Object.keys(REF).length){const g={};D.h.forEach(h=>{const b=
  const coe=dOf(h[1]);const ready=coe<=TODAY;const rs=addMonths(ready?TODAY:coe,S.lease);
  const closeM=ready?0:monthsBetween(TODAY,coe);
  const monthsPaying=Math.max(0,12-S.lease);
- return {i,comm:comm[0],city,addr:h[2],plan:h[3],beds:h[5],baths:h[6],sqft:h[7],price,coe,ready,closeM,rent,rs,yld:rent*12/price*100,y1:rent*monthsPaying,drop:h[11],conf:R.cities[city][2],proxy:R.cities[city][3]}}).filter(Boolean)}
+ return {i,comm:comm[0],city,addr:h[2],plan:h[3],fl:h[4],beds:h[5],baths:h[6],sqft:h[7],price,coe,ready,closeM,rent,rs,yld:rent*12/price*100,y1:rent*monthsPaying,drop:h[11],conf:R.cities[city][2],proxy:R.cities[city][3]}}).filter(Boolean)}
 function filtered(){let a=ALL.filter(h=>(!S.price||h.price<=S.price)&&h.beds>=S.beds&&(!S.months.length||S.months.includes(mKey(h)))&&h.yld>=S.minY&&(!S.cities.length||S.cities.includes(h.city))&&(!S.q||(h.comm+" "+h.city+" "+h.addr).toLowerCase().includes(S.q.trim().toLowerCase())));
  const f={yield:(x,y)=>y.yld-x.yld,y1:(x,y)=>y.y1/y.price-x.y1/x.price,price:(x,y)=>x.price-y.price,rent:(x,y)=>y.rent-x.rent,soon:(x,y)=>x.coe-y.coe}[S.sort];return a.sort(f)}
 function opts(list,cur){return list.map(([v,l])=>'<option value="'+v+'"'+(String(cur)===String(v)?" selected":"")+">"+esc(l)+"</option>").join("")}
@@ -174,6 +174,7 @@ function render(){
  rows.slice(0,S.limit).forEach(x=>{
   h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX'+'</div>'
   +'<div class="loc">'+esc(t("beds",{b:x.beds,ba:x.baths,sf:x.sqft.toLocaleString("en-US")}))+'</div>'
+  +'<div class="loc">'+esc(t("planline",{p:x.plan,fl:t("story",{n:x.fl})}))+'</div>'
   +((x.drop||x.conf==="l")?'<div class="tags">'+(x.drop?'<span class="tag drop">▼ '+esc(t("dropped",{x:usd(x.drop-x.price)}))+'</span>':"")+(x.conf==="l"?'<span class="tag low">'+esc(t("low_conf"))+'</span>':"")+'</div>':"")+'</div>'
   +'<div class="big"><div class="y">'+x.yld.toFixed(1)+'%</div><div class="yl">'+esc(t("yield"))+'</div></div>'
   +'<div class="nums"><div><span>'+esc(t("price"))+'</span><b>'+usd(x.price)+'</b></div>'
