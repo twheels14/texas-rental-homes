@@ -34,6 +34,7 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 .home{padding:16px 18px;margin:0 0 12px;display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start}
 .addr{font-weight:900;font-size:19px;direction:ltr}html[dir=rtl] .addr{text-align:right}
 .loc{color:var(--muted);font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tags .tag{margin:0}
 .big{text-align:end}.big .y{font-size:30px;font-weight:900;color:var(--good);line-height:1;font-variant-numeric:tabular-nums}
 .big .yl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--muted)}
 .nums{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:6px}
@@ -165,8 +166,9 @@ function render(){
  h+='<div class="bar"><div class="count">'+t("n_homes",{n:rows.length.toLocaleString("en-US")})+' <small>· '+t("shown",{n:Math.min(S.limit,rows.length)})+'</small></div></div>';
  if(!rows.length)h+='<p class="status">'+esc(t("none"))+'</p>';
  rows.slice(0,S.limit).forEach(x=>{
-  h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX'+(x.drop?'<span class="tag drop">▼ '+esc(t("dropped",{x:usd(x.drop-x.price)}))+'</span>':"")+(x.conf==="l"?'<span class="tag low">'+esc(t("low_conf"))+'</span>':"")+'</div>'
-  +'<div class="loc">'+esc(t("beds",{b:x.beds,ba:x.baths,sf:x.sqft.toLocaleString("en-US")}))+'</div></div>'
+  h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX'+'</div>'
+  +'<div class="loc">'+esc(t("beds",{b:x.beds,ba:x.baths,sf:x.sqft.toLocaleString("en-US")}))+'</div>'
+  +((x.drop||x.conf==="l")?'<div class="tags">'+(x.drop?'<span class="tag drop">▼ '+esc(t("dropped",{x:usd(x.drop-x.price)}))+'</span>':"")+(x.conf==="l"?'<span class="tag low">'+esc(t("low_conf"))+'</span>':"")+'</div>':"")+'</div>'
   +'<div class="big"><div class="y">'+x.yld.toFixed(1)+'%</div><div class="yl">'+esc(t("yield"))+'</div></div>'
   +'<div class="nums"><div><span>'+esc(t("price"))+'</span><b>'+usd(x.price)+'</b></div>'
   +'<div><span>'+esc(t("rent"))+'</span><b>'+usd(x.rent)+'</b></div>'
