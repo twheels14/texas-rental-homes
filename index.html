@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Texas Rental Home Finder</title>
+<title>Investment Property Search</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
 <style>
 :root{--bg:#F3F5F8;--surface:#fff;--ink:#1F2B3D;--muted:#5A6678;--line:#D8DEE7;--navy:#1B2A49;--navy-ink:#F4F7FB;--teal:#0E7C86;--teal-soft:#E1F1F2;--teal-ink:#0A5F67;--gold:#FFF1CC;--gold-line:#E4C877;--gold-ink:#5C4400;--good:#1C6B3A;--good-soft:#DDF0E3;--drop:#B32620;--drop-soft:#FCE4E2;--font:'Lato','Segoe UI','Arial Hebrew',Arial,system-ui,sans-serif}
@@ -62,7 +62,7 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 const CONTACT={name:"Trevor Wheeler",phone:"(830) 743-7270",email:"trevor.wheeler@lennar.com"};
 const SHEET_URL="https://docs.google.com/spreadsheets/d/1ZZpxQU_oTVTAmeLRea9jl_2LrwgPjgzkF5iyGo3ht18/view";
 const T={
-en:{who:"New Home Consultant, Lennar",h1:"Texas rental homes, ranked by estimated return",
+en:{who:"New Home Consultant, Lennar",h1:"Investment Property Search",
 sub:"New-construction homes from Lennar in Texas. See estimated rent, gross yield and how long until rent starts. Everything is priced in US dollars, with no loan needed.",
 disc:"Rent figures are estimates from public rent averages by city and bedroom count. They are not guaranteed. Yields are gross: before property tax, insurance, management and repairs. Confirm rent with a local property manager before buying.",
 f_search:"Search community, city or address",f_search_ph:"e.g. Brookmill",f_price:"Max price",f_beds:"Bedrooms",f_close:"Closing within",f_lease:"Time to find a tenant",f_rent:"Rent assumption",f_sort:"Sort by",f_minY:"Min. gross yield",
@@ -79,7 +79,7 @@ meth:["Estimated rent: average monthly rent for houses of that bedroom count in 
 conf_h:"Where rent data comes from",conf_city:"City data",conf_proxy:"Estimated from nearby: {x}",
 c_h:"Ready to look closer?",c_p:"When you are ready, I can connect you with the US realtor I work with to buy.",
 sheet:"View the full inventory spreadsheet ↗",upd:"Inventory updated {d}"},
-es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Casas en renta en Texas, ordenadas por rendimiento estimado",
+es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Búsqueda de propiedades de inversión",
 sub:"Casas nuevas de Lennar en Texas. Vea la renta estimada, el rendimiento bruto y cuánto falta para que empiece la renta. Todo en dólares, sin necesidad de préstamo.",
 disc:"Las rentas son estimaciones basadas en promedios públicos por ciudad y número de recámaras. No están garantizadas. El rendimiento es bruto: antes de impuestos, seguro, administración y reparaciones. Confirme la renta con un administrador local antes de comprar.",
 f_search:"Buscar comunidad, ciudad o dirección",f_search_ph:"p. ej. Brookmill",f_price:"Precio máximo",f_beds:"Recámaras",f_close:"Cierre dentro de",f_lease:"Tiempo para hallar inquilino",f_rent:"Supuesto de renta",f_sort:"Ordenar por",f_minY:"Rend. bruto mínimo",
@@ -96,7 +96,7 @@ meth:["Renta estimada: promedio mensual de casas con ese número de recámaras e
 conf_h:"Origen de los datos de renta",conf_city:"Datos de la ciudad",conf_proxy:"Estimado de zona cercana: {x}",
 c_h:"¿Listo para ver más?",c_p:"Cuando esté listo, puedo conectarlo con el agente inmobiliario en EE. UU. con quien trabajo para comprar.",
 sheet:"Ver la hoja de inventario completa ↗",upd:"Inventario actualizado {d}"},
-he:{who:"יועץ בתים חדשים, Lennar",h1:"בתים להשכרה בטקסס, מדורגים לפי תשואה משוערת",
+he:{who:"יועץ בתים חדשים, Lennar",h1:"חיפוש נכסי השקעה",
 sub:"בתים חדשים של Lennar בטקסס. ראו שכירות משוערת, תשואה ברוטו וכמה זמן עד שהשכירות מתחילה. הכול בדולרים, ללא צורך במשכנתא.",
 disc:"נתוני השכירות הם הערכות על בסיס ממוצעי שכירות פומביים לפי עיר ומספר חדרי שינה. אין ערובה להם. התשואה ברוטו: לפני מס נכס, ביטוח, ניהול ותיקונים. מומלץ לאמת שכירות מול מנהל נכסים מקומי לפני הרכישה.",
 f_search:"חיפוש שכונה, עיר או כתובת",f_search_ph:"למשל Brookmill",f_price:"מחיר מקסימלי",f_beds:"חדרי שינה",f_close:"סגירה תוך",f_lease:"זמן למציאת שוכר",f_rent:"הנחת שכירות",f_sort:"מיון לפי",f_minY:"תשואה ברוטו מינימלית",
