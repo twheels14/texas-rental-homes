@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Investment Property Search</title>
+<title>Home Inventory Search</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
 <style>
 :root{--bg:#F3F5F8;--surface:#fff;--ink:#1F2B3D;--muted:#5A6678;--line:#D8DEE7;--navy:#1B2A49;--navy-ink:#F4F7FB;--teal:#0E7C86;--teal-soft:#E1F1F2;--teal-ink:#0A5F67;--gold:#FFF1CC;--gold-line:#E4C877;--gold-ink:#5C4400;--good:#1C6B3A;--good-soft:#DDF0E3;--drop:#B32620;--drop-soft:#FCE4E2;--font:'Lato','Segoe UI','Arial Hebrew',Arial,system-ui,sans-serif}
@@ -51,6 +51,9 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 .status{padding:30px 6px;color:var(--muted);font-size:18px}
 .meth{padding:14px 18px;margin:12px 0;font-size:15px}.meth summary{font-weight:900;cursor:pointer;font-size:16px}
 .meth table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}.meth td,.meth th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:start}
+.links{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.cardbtn{min-height:40px;font-size:15px}.cardbtn[data-ok=true]{border-color:var(--good);color:var(--good)}
+.ov{position:fixed;inset:0;background:rgba(10,16,28,.7);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;overflow:auto}
+.dlg{max-width:520px;width:100%;padding:16px;max-height:100%;overflow:auto}.dlg img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);margin:8px 0;-webkit-touch-callout:default;user-select:auto}.dlg .row{display:flex;gap:10px;flex-wrap:wrap}.dlg .btn{display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
 @media (max-width:560px){.home{grid-template-columns:1fr}.big{text-align:start}}
 </style></head><body>
 <div class="wrap">
@@ -60,109 +63,133 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 <div class="foot" id="foot"></div>
 </div>
 <script>
-const CONTACT={name:"Trevor Wheeler",phone:"(830) 743-7270",email:"trevor.wheeler@lennar.com"};
+const CONTACT={name:"Trevor Wheeler",phone:"(830) 743-7270",email:"trevor.wheeler@lennar.com",role:{en:"New Home Consultant, Lennar",es:"Consultor de Casas Nuevas, Lennar",he:"יועץ בתים חדשים, Lennar"}};
 const SHEET_URL="https://docs.google.com/spreadsheets/d/1ZZpxQU_oTVTAmeLRea9jl_2LrwgPjgzkF5iyGo3ht18/view";
 const T={
-en:{who:"New Home Consultant, Lennar",h1:"Investment Property Search",
-sub:"New-construction homes from Lennar in Texas. See estimated rent, gross yield and how long until rent starts. Everything is priced in US dollars, with no loan needed.",
-disc:"Rent figures are estimates from public rent averages by city and bedroom count. They are not guaranteed. Yields are gross: before property tax, insurance, management and repairs. Confirm rent with a local property manager before buying.",
-f_search:"Search community, city or address (separate several with commas)",f_search_ph:"e.g. Brookmill, 123 Main St, Kyle",f_price:"Max price",f_beds:"Bedrooms",f_close:"Closing within",f_lease:"Time to find a tenant",f_rent:"Rent assumption",f_sort:"Sort by",f_minY:"Min. gross yield",
-any:"Any",b3:"3+",b4:"4+",b5:"5+",mo:"{n} months",mo1:"1 month",mo0:"Right away",mo_any:"No limit",
-r_low:"Cautious (−10%)",r_mid:"Market average",r_high:"Optimistic (+10%)",
-s_yield:"Highest gross yield",s_y1:"Highest first-year income",s_price:"Lowest price",s_rent:"Highest rent",s_soon:"Soonest closing",
+en:{who:"New Home Consultant, Lennar",h1:"Home Inventory Search",
+sub:"New-construction homes from Lennar in Texas. Search by address, community or city, filter by price, size and closing month, and copy a card to send.",
+disc:"Prices, incentives and availability change often. Please confirm details with me before making a decision.",
+f_search:"Search community, city or address (separate several with commas)",f_search_ph:"e.g. Brookmill, 123 Main St, Kyle",f_price:"Max price",f_beds:"Bedrooms",f_sort:"Sort by",
+any:"Any",b3:"3+",b4:"4+",b5:"5+",
+s_price:"Lowest price",s_price_hi:"Highest price",s_soon:"Soonest closing",s_sqft:"Largest size",s_ppsf:"Lowest price per sq ft",
 cities:"Cities",cities_n:"Cities ({n} selected)",clear:"Clear cities",months:"Closing months",months_n:"Closing months ({n} selected)",clear_m:"Clear months",m_hint:"Pick as many months as you like. Leave all unchecked to see every month.",
 n_homes:"{n} home|{n} homes",shown:"showing {n}",none:"No homes match. Try widening the filters.",
-yield:"Gross yield",rent:"Est. rent / mo",price:"Price",close:"Closing",first:"First rent",y1:"Income, first 12 mo",
-ready:"Ready now",est:"Estimated",dropped:"Price dropped {x}",low_conf:"Rent estimated from nearby area",
+price:"Price",ppsf:"Price / sq ft",sqft:"Size",close:"Closing",plan:"Plan",bd:"Bedrooms",ba:"Bathrooms",
+ready:"Ready now",dropped:"Price dropped {x}",sqft_u:"{n} sq ft",
 beds:"{b} bd · {ba} ba · {sf} sq ft",planline:"Plan: {p} · {fl}",story:"1 story|{n} stories",view:"View community ↗",more:"Show {n} more",
-meth_h:"How the numbers are calculated",
-meth:["Estimated rent: average monthly rent for houses of that bedroom count in the city (Rentometer, Oct 2025 – Jun 2026), then adjusted by the rent assumption you choose. Homes with 5 or more bedrooms use the 4+ bedroom figure plus 12%. Rent is also scaled up or down (at most 12% up, 15% down) for homes larger or smaller than the typical home with the same bedrooms.","Gross yield: estimated annual rent divided by price. Taxes, insurance, vacancy after the first lease, management and repairs are not included.","Closing: the estimated closing date for each home. Rent starts after closing plus the time you pick to find a tenant.","Income, first 12 months: rent for the months after rent starts, within 12 months of closing."],
-conf_h:"Where rent data comes from",conf_city:"City data",conf_proxy:"Estimated from nearby: {x}",
+share:"Share these results",copied:"Link copied",copy_fail:"Copy this link:",
+card:"Copy card",card_ok:"Card copied",card_h:"Home card",card_save:"Your browser blocked copying. Press and hold (or right-click) the image to copy or save it.",card_dl:"Download image",card_x:"Close",card_tag:"New home",
 c_h:"Ready to look closer?",c_p:"When you are ready, I can connect you with the US realtor I work with to buy.",
-share:"Share these results",copied:"Link copied",copy_fail:"Copy this link:",sheet:"View the full inventory spreadsheet ↗",upd:"Inventory updated {d}"},
-es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Búsqueda de propiedades de inversión",
-sub:"Casas nuevas de Lennar en Texas. Vea la renta estimada, el rendimiento bruto y cuánto falta para que empiece la renta. Todo en dólares, sin necesidad de préstamo.",
-disc:"Las rentas son estimaciones basadas en promedios públicos por ciudad y número de recámaras. No están garantizadas. El rendimiento es bruto: antes de impuestos, seguro, administración y reparaciones. Confirme la renta con un administrador local antes de comprar.",
-f_search:"Buscar comunidad, ciudad o dirección (separe varias con comas)",f_search_ph:"p. ej. Brookmill, 123 Main St, Kyle",f_price:"Precio máximo",f_beds:"Recámaras",f_close:"Cierre dentro de",f_lease:"Tiempo para hallar inquilino",f_rent:"Supuesto de renta",f_sort:"Ordenar por",f_minY:"Rend. bruto mínimo",
-any:"Cualquiera",b3:"3+",b4:"4+",b5:"5+",mo:"{n} meses",mo1:"1 mes",mo0:"De inmediato",mo_any:"Sin límite",
-r_low:"Cauteloso (−10%)",r_mid:"Promedio del mercado",r_high:"Optimista (+10%)",
-s_yield:"Mayor rendimiento bruto",s_y1:"Mayor ingreso del primer año",s_price:"Menor precio",s_rent:"Mayor renta",s_soon:"Cierre más próximo",
+sheet:"View the full inventory spreadsheet ↗",upd:"Inventory updated {d}"},
+es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Búsqueda de inventario de casas",
+sub:"Casas nuevas de Lennar en Texas. Busque por dirección, comunidad o ciudad, filtre por precio, tamaño y mes de cierre, y copie una tarjeta para enviar.",
+disc:"Los precios, incentivos y la disponibilidad cambian con frecuencia. Confirme los detalles conmigo antes de decidir.",
+f_search:"Buscar comunidad, ciudad o dirección (separe varias con comas)",f_search_ph:"p. ej. Brookmill, 123 Main St, Kyle",f_price:"Precio máximo",f_beds:"Recámaras",f_sort:"Ordenar por",
+any:"Cualquiera",b3:"3+",b4:"4+",b5:"5+",
+s_price:"Menor precio",s_price_hi:"Mayor precio",s_soon:"Cierre más próximo",s_sqft:"Mayor tamaño",s_ppsf:"Menor precio por pie²",
 cities:"Ciudades",cities_n:"Ciudades ({n} seleccionadas)",clear:"Borrar ciudades",months:"Meses de cierre",months_n:"Meses de cierre ({n} seleccionados)",clear_m:"Borrar meses",m_hint:"Elija los meses que quiera. Sin selección se muestran todos.",
 n_homes:"{n} casa|{n} casas",shown:"mostrando {n}",none:"Ninguna casa coincide. Amplíe los filtros.",
-yield:"Rend. bruto",rent:"Renta est. / mes",price:"Precio",close:"Cierre",first:"Primera renta",y1:"Ingreso, primeros 12 meses",
-ready:"Lista ya",est:"Estimado",dropped:"Bajó de precio {x}",low_conf:"Renta estimada de zona cercana",
+price:"Precio",ppsf:"Precio / pie²",sqft:"Tamaño",close:"Cierre",plan:"Modelo",bd:"Recámaras",ba:"Baños",
+ready:"Lista ya",dropped:"Bajó de precio {x}",sqft_u:"{n} pies²",
 beds:"{b} rec · {ba} baños · {sf} pies²",planline:"Modelo: {p} · {fl}",story:"1 piso|{n} pisos",view:"Ver comunidad ↗",more:"Mostrar {n} más",
-meth_h:"Cómo se calculan los números",
-meth:["Renta estimada: promedio mensual de casas con ese número de recámaras en la ciudad (Rentometer, oct 2025 – jun 2026), ajustado según el supuesto que elija. Las casas de 5 o más recámaras usan la cifra de 4+ más 12%. La renta también se ajusta según el tamaño de la casa frente a una típica con las mismas recámaras (máx. 12% más, 15% menos).","Rendimiento bruto: renta anual estimada dividida entre el precio. No incluye impuestos, seguro, vacancia posterior, administración ni reparaciones.","Cierre: fecha estimada de cierre de cada casa. La renta empieza después del cierre más el tiempo que elija para hallar inquilino.","Ingreso de los primeros 12 meses: renta de los meses posteriores al inicio de renta, dentro de 12 meses desde el cierre."],
-conf_h:"Origen de los datos de renta",conf_city:"Datos de la ciudad",conf_proxy:"Estimado de zona cercana: {x}",
+share:"Compartir estos resultados",copied:"Enlace copiado",copy_fail:"Copie este enlace:",
+card:"Copiar tarjeta",card_ok:"Tarjeta copiada",card_h:"Tarjeta de la casa",card_save:"Su navegador bloqueó la copia. Mantenga presionada (o haga clic derecho en) la imagen para copiarla o guardarla.",card_dl:"Descargar imagen",card_x:"Cerrar",card_tag:"Casa nueva",
 c_h:"¿Listo para ver más?",c_p:"Cuando esté listo, puedo conectarlo con el agente inmobiliario en EE. UU. con quien trabajo para comprar.",
-share:"Compartir estos resultados",copied:"Enlace copiado",copy_fail:"Copie este enlace:",sheet:"Ver la hoja de inventario completa ↗",upd:"Inventario actualizado {d}"},
-he:{who:"יועץ בתים חדשים, Lennar",h1:"חיפוש נכסי השקעה",
-sub:"בתים חדשים של Lennar בטקסס. ראו שכירות משוערת, תשואה ברוטו וכמה זמן עד שהשכירות מתחילה. הכול בדולרים, ללא צורך במשכנתא.",
-disc:"נתוני השכירות הם הערכות על בסיס ממוצעי שכירות פומביים לפי עיר ומספר חדרי שינה. אין ערובה להם. התשואה ברוטו: לפני מס נכס, ביטוח, ניהול ותיקונים. מומלץ לאמת שכירות מול מנהל נכסים מקומי לפני הרכישה.",
-f_search:"חיפוש שכונה, עיר או כתובת (אפשר כמה, מופרדים בפסיקים)",f_search_ph:"למשל Brookmill, 123 Main St, Kyle",f_price:"מחיר מקסימלי",f_beds:"חדרי שינה",f_close:"סגירה תוך",f_lease:"זמן למציאת שוכר",f_rent:"הנחת שכירות",f_sort:"מיון לפי",f_minY:"תשואה ברוטו מינימלית",
-any:"הכול",b3:"3+",b4:"4+",b5:"5+",mo:"{n} חודשים",mo1:"חודש",mo0:"מיד",mo_any:"ללא הגבלה",
-r_low:"זהיר (−10%)",r_mid:"ממוצע שוק",r_high:"אופטימי (+10%)",
-s_yield:"תשואה ברוטו הגבוהה ביותר",s_y1:"הכנסה גבוהה בשנה הראשונה",s_price:"המחיר הנמוך ביותר",s_rent:"השכירות הגבוהה ביותר",s_soon:"הסגירה הקרובה ביותר",
+sheet:"Ver la hoja de inventario completa ↗",upd:"Inventario actualizado {d}"},
+he:{who:"יועץ בתים חדשים, Lennar",h1:"חיפוש במלאי הבתים",
+sub:"בתים חדשים של Lennar בטקסס. חפשו לפי כתובת, שכונה או עיר, סננו לפי מחיר, גודל וחודש סגירה, והעתיקו כרטיס לשליחה.",
+disc:"מחירים, הטבות וזמינות משתנים לעיתים קרובות. מומלץ לאמת איתי את הפרטים לפני קבלת החלטה.",
+f_search:"חיפוש שכונה, עיר או כתובת (אפשר כמה, מופרדים בפסיקים)",f_search_ph:"למשל Brookmill, 123 Main St, Kyle",f_price:"מחיר מקסימלי",f_beds:"חדרי שינה",f_sort:"מיון לפי",
+any:"הכול",b3:"3+",b4:"4+",b5:"5+",
+s_price:"המחיר הנמוך ביותר",s_price_hi:"המחיר הגבוה ביותר",s_soon:"הסגירה הקרובה ביותר",s_sqft:"הגדול ביותר",s_ppsf:"מחיר נמוך לרגל²",
 cities:"ערים",cities_n:"ערים ({n} נבחרו)",clear:"נקה ערים",months:"חודשי סגירה",months_n:"חודשי סגירה ({n} נבחרו)",clear_m:"נקה חודשים",m_hint:"בחרו כמה חודשים שתרצו. בלי בחירה יוצגו כל החודשים.",
 n_homes:"בית {n}|{n} בתים",shown:"מוצגים {n}",none:"לא נמצאו בתים. נסו להרחיב את הסינון.",
-yield:"תשואה ברוטו",rent:"שכירות משוערת / חודש",price:"מחיר",close:"סגירה",first:"שכירות ראשונה",y1:"הכנסה ב-12 חודשים ראשונים",
-ready:"מוכן עכשיו",est:"משוער",dropped:"המחיר ירד {x}",low_conf:"שכירות משוערת מאזור סמוך",
+price:"מחיר",ppsf:"מחיר / רגל²",sqft:"גודל",close:"סגירה",plan:"דגם",bd:"חדרי שינה",ba:"מקלחות",
+ready:"מוכן עכשיו",dropped:"המחיר ירד {x}",sqft_u:"{n} רגל²",
 beds:"{b} חד׳ שינה · {ba} מקלחות · {sf} רגל²",planline:"דגם: {p} · {fl}",story:"קומה אחת|{n} קומות",view:"לצפייה בשכונה ↗",more:"הצג עוד {n}",
-meth_h:"איך המספרים מחושבים",
-meth:["שכירות משוערת: ממוצע שכירות חודשית לבתים עם אותו מספר חדרי שינה בעיר (Rentometer, אוקטובר 2025 – יוני 2026), ומותאם להנחה שבחרתם. בתים עם 5 חדרי שינה ומעלה מחושבים לפי נתון 4+ ועוד 12%. השכירות מותאמת גם לגודל הבית לעומת בית טיפוסי עם אותו מספר חדרים (עד 12% יותר או 15% פחות).","תשואה ברוטו: שכירות שנתית משוערת חלקי המחיר. לא כולל מס נכס, ביטוח, תקופות ללא שוכר לאחר החוזה הראשון, ניהול ותיקונים.","סגירה: תאריך הסגירה המשוער של כל בית. השכירות מתחילה אחרי הסגירה ועוד הזמן שבחרתם למציאת שוכר.","הכנסה ב-12 חודשים ראשונים: שכירות עבור החודשים שאחרי תחילת השכירות, בתוך 12 חודשים מהסגירה."],
-conf_h:"מקור נתוני השכירות",conf_city:"נתוני העיר",conf_proxy:"הערכה לפי אזור סמוך: {x}",
+share:"שתפו את התוצאות",copied:"הקישור הועתק",copy_fail:"העתיקו את הקישור:",
+card:"העתקת כרטיס",card_ok:"הכרטיס הועתק",card_h:"כרטיס הבית",card_save:"הדפדפן חסם את ההעתקה. לחצו לחיצה ארוכה (או קליק ימני) על התמונה כדי להעתיק או לשמור.",card_dl:"הורדת תמונה",card_x:"סגירה",card_tag:"בית חדש",
 c_h:"מוכנים להעמיק?",c_p:"כשתהיו מוכנים, אפשר לחבר אתכם למתווך האמריקאי שאיתו אני עובד לצורך הרכישה.",
-share:"שתפו את התוצאות",copied:"הקישור הועתק",copy_fail:"העתיקו את הקישור:",sheet:"לגיליון המלאי המלא ↗",upd:"המלאי עודכן {d}"}
+sheet:"לגיליון המלאי המלא ↗",upd:"המלאי עודכן {d}"}
 };
 let lang="he";try{lang=localStorage.getItem("ih_lang")||((navigator.language||"en").slice(0,2))}catch(e){}
 if(!T[lang])lang="en";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const t=(k,v)=>{let s=T[lang][k]??T.en[k]??k;if(typeof s!=="string")return s;if(s.includes("|")&&v&&v.n!=null){const p=s.split("|");s=(v.n===1?p[0]:p[1])}
+const t=(k,v)=>{let s=T[lang][k]??T.en[k]??k;if(typeof s!=="string")return s;if(s.includes("|")&&v&&v.n!=null){const p=s.split("|");s=(Number(String(v.n).replace(/,/g,""))===1?p[0]:p[1])}
  if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
 const usd=n=>"$"+Math.round(n).toLocaleString("en-US");
 const loc={en:"en-US",es:"es-US",he:"he-IL"};
-let D=null,R=null,S={price:0,beds:3,months:[],lease:1,rent:0,sort:"yield",minY:0,cities:[],q:"",limit:30};
-try{const o=JSON.parse(sessionStorage.getItem("ih_s")||"null");if(o)S=Object.assign(S,o,{limit:30});if(!Array.isArray(S.months))S.months=[]}catch(e){}
-const DEF={price:0,beds:3,months:[],lease:1,rent:0,sort:"yield",minY:0,cities:[],q:""};
+const DEF={price:0,beds:0,months:[],sort:"price",cities:[],q:""};
+const SORTS=["price","price_hi","soon","sqft","ppsf"];
+let D=null,S=Object.assign({},DEF,{limit:30});
+try{const o=JSON.parse(sessionStorage.getItem("inv_s")||"null");if(o)S=Object.assign(S,o,{limit:30});if(!Array.isArray(S.months))S.months=[];if(!SORTS.includes(S.sort))S.sort="price"}catch(e){}
+const save=()=>{try{sessionStorage.setItem("inv_s",JSON.stringify(S))}catch(e){}};
 function fromHash(){try{const h=location.hash.replace(/^#/,"");if(!h)return false;const p=new URLSearchParams(h);if(![...p.keys()].length)return false;
  const n=(k,d)=>{const v=parseFloat(p.get(k));return isFinite(v)?v:d};
- const o=Object.assign({},DEF,{price:Math.max(0,n("p",0)),beds:n("b",3),lease:n("l",1),rent:n("r",0),minY:n("y",0),sort:p.get("s")||"yield",q:(p.get("q")||"").slice(0,400),
+ const o=Object.assign({},DEF,{price:Math.max(0,n("p",0)),beds:n("b",0),sort:p.get("s")||"price",q:(p.get("q")||"").slice(0,400),
   months:(p.get("m")||"").split(",").filter(x=>/^(ready|\d{4}-\d{2})$/.test(x)),cities:(p.get("c")||"").split("|").filter(Boolean)});
- if(!["yield","y1","price","rent","soon"].includes(o.sort))o.sort="yield";
+ if(!SORTS.includes(o.sort))o.sort="price";
  S=Object.assign(S,o,{limit:30});const g=p.get("g");if(g&&T[g])lang=g;return true}catch(e){return false}}
 function shareUrl(){const p=new URLSearchParams();
- if(S.price)p.set("p",S.price);if(S.beds!==DEF.beds)p.set("b",S.beds);if(S.lease!==DEF.lease)p.set("l",S.lease);if(S.rent)p.set("r",S.rent);if(S.minY)p.set("y",S.minY);
- if(S.sort!==DEF.sort)p.set("s",S.sort);if(S.q&&S.q.trim())p.set("q",S.q.trim());if(S.months.length)p.set("m",S.months.join(","));if(S.cities.length)p.set("c",S.cities.join("|"));
- p.set("g",lang);return location.origin+location.pathname+"#"+p.toString()}
+ if(S.price)p.set("p",S.price);if(S.beds)p.set("b",S.beds);if(S.sort!==DEF.sort)p.set("s",S.sort);if(S.q&&S.q.trim())p.set("q",S.q.trim());
+ if(S.months.length)p.set("m",S.months.join(","));if(S.cities.length)p.set("c",S.cities.join("|"));p.set("g",lang);return location.origin+location.pathname+"#"+p.toString()}
 async function copyShare(btn){const u=shareUrl();let ok=false;
  try{await navigator.clipboard.writeText(u);ok=true}catch(e){try{const a=document.createElement("textarea");a.value=u;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();ok=document.execCommand("copy");a.remove()}catch(e2){}}
  if(ok){btn.dataset.ok="true";btn.textContent="✓ "+t("copied");setTimeout(()=>{btn.dataset.ok="false";btn.textContent="🔗 "+t("share")},2500)}else{window.prompt(t("copy_fail"),u)}}
-const save=()=>{try{sessionStorage.setItem("ih_s",JSON.stringify(S))}catch(e){}};
 fromHash();
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 function dOf(n){return new Date(Math.floor(n/10000),Math.floor(n/100)%100-1,n%100)}
-function monthsBetween(a,b){return (b-a)/86400000/30.44}
 function fmtMonth(d){return d.toLocaleDateString(loc[lang],{month:"long",year:"numeric"})}
 function fmtDate(d){return d.toLocaleDateString(loc[lang],{month:"short",day:"numeric",year:"numeric"})}
 function mKey(h){return h.ready?"ready":h.coe.getFullYear()+"-"+String(h.coe.getMonth()+1).padStart(2,"0")}
-function addMonths(d,m){const x=new Date(d);x.setDate(x.getDate()+Math.round(m*30.44));return x}
-let REF={};
-function rentFor(city,beds,sqft){const c=R.cities[city];if(!c)return null;let r=beds<=2?c[0]*.85:beds===3?c[0]:beds===4?c[1]:c[1]*1.12;
- const ref=REF[Math.min(beds,5)];if(ref&&sqft)r*=Math.min(1.12,Math.max(.85,Math.sqrt(sqft/ref)));
- return Math.round(r*(1+S.rent/100)/25)*25}
 let ALL=[];
-function prep(){if(!Object.keys(REF).length){const g={};D.h.forEach(h=>{const b=Math.min(h[5],5);(g[b]=g[b]||[]).push(h[7])});for(const b in g){const a=g[b].sort((x,y)=>x-y);REF[b]=a[a.length>>1]}}
- ALL=D.h.map((h,i)=>{const comm=D.c[h[0]],price=h[8],city=h[10],rent=rentFor(city,h[5],h[7]);if(!rent||!price)return null;
- const coe=dOf(h[1]);const ready=coe<=TODAY;const rs=addMonths(ready?TODAY:coe,S.lease);
- const closeM=ready?0:monthsBetween(TODAY,coe);
- const monthsPaying=Math.max(0,12-S.lease);
- return {i,comm:comm[0],city,addr:h[2],plan:h[3],fl:h[4],beds:h[5],baths:h[6],sqft:h[7],price,coe,ready,closeM,rent,rs,yld:rent*12/price*100,y1:rent*monthsPaying,drop:h[11],conf:R.cities[city][2],proxy:R.cities[city][3]}}).filter(Boolean)}
+function prep(){ALL=D.h.map((h,i)=>{const comm=D.c[h[0]],price=h[8];if(!price)return null;const coe=dOf(h[1]);
+ return {i,comm:comm[0],city:h[10],addr:h[2],plan:h[3],fl:h[4],beds:h[5],baths:h[6],sqft:h[7],price,coe,ready:coe<=TODAY,ppsf:h[7]?price/h[7]:0,drop:h[11]}}).filter(Boolean)}
 function qTerms(q){return String(q||"").split(/[,;\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean)}
-function filtered(){const qs=qTerms(S.q);let a=ALL.filter(h=>(!S.price||h.price<=S.price)&&h.beds>=S.beds&&(!S.months.length||S.months.includes(mKey(h)))&&h.yld>=S.minY&&(!S.cities.length||S.cities.includes(h.city))&&(!qs.length||qs.some(w=>(h.comm+" "+h.city+" "+h.addr).toLowerCase().includes(w))));
- const f={yield:(x,y)=>y.yld-x.yld,y1:(x,y)=>y.y1/y.price-x.y1/x.price,price:(x,y)=>x.price-y.price,rent:(x,y)=>y.rent-x.rent,soon:(x,y)=>x.coe-y.coe}[S.sort];return a.sort(f)}
+function filtered(){const qs=qTerms(S.q);let a=ALL.filter(h=>(!S.price||h.price<=S.price)&&h.beds>=S.beds&&(!S.months.length||S.months.includes(mKey(h)))&&(!S.cities.length||S.cities.includes(h.city))&&(!qs.length||qs.some(w=>(h.comm+" "+h.city+" "+h.addr).toLowerCase().includes(w))));
+ const f={price:(x,y)=>x.price-y.price,price_hi:(x,y)=>y.price-x.price,soon:(x,y)=>x.coe-y.coe||x.price-y.price,sqft:(x,y)=>y.sqft-x.sqft,ppsf:(x,y)=>x.ppsf-y.ppsf}[S.sort];return a.sort(f)}
 function opts(list,cur){return list.map(([v,l])=>'<option value="'+v+'"'+(String(cur)===String(v)?" selected":"")+">"+esc(l)+"</option>").join("")}
+/* ---- card image ---- */
+async function makeCardBlob(x){
+ try{await Promise.all([document.fonts.load("900 40px Lato"),document.fonts.load("700 24px Lato")])}catch(e){}
+ const W=1080,P=60,rtl=lang==="he",FF="Lato,'Segoe UI',Arial,sans-serif";
+ const cv=document.createElement("canvas");cv.width=W;cv.height=1240;const c=cv.getContext("2d");
+ c.direction=rtl?"rtl":"ltr";
+ const NAVY="#1B2A49",TEAL="#0E7C86",INK="#1F2B3D",MUT="#5A6678",LINE="#D8DEE7",BG="#F3F5F8",DROP="#B32620",DROPBG="#FCE4E2";
+ const al=rtl?"right":"left",X0=rtl?W-P:P;
+ const fit=(txt,w,px,wt)=>{let s=px;do{c.font=wt+" "+s+"px "+FF;if(c.measureText(txt).width<=w||s<=22)break;s-=2}while(true)};
+ c.fillStyle="#fff";c.fillRect(0,0,W,1240);
+ c.fillStyle=NAVY;c.fillRect(0,0,W,130);
+ c.fillStyle="#fff";c.textAlign=al;c.textBaseline="middle";c.font="700 30px "+FF;c.fillText(t("card_tag").toUpperCase()+"  ·  "+x.comm,X0,65,W-2*P);
+ let y=200;c.textBaseline="alphabetic";
+ c.fillStyle=INK;c.textAlign=al;fit(x.addr,W-2*P,64,900);c.fillText(rtl?"\u2066"+x.addr+"\u2069":x.addr,X0,y+30);
+ y+=84;c.fillStyle=MUT;c.font="700 34px "+FF;c.fillText(x.city+", TX",X0,y,W-2*P);
+ y+=70;c.fillStyle=TEAL;fit(usd(x.price),W-2*P,120,900);c.fillText(usd(x.price),X0,y+80);
+ let ty=y+80;
+ if(x.drop&&x.drop>x.price){const txt="▼ "+t("dropped",{x:usd(x.drop-x.price)});c.font="900 28px "+FF;const w=c.measureText(txt).width+44;const bx=rtl?W-P-w:P;
+  c.fillStyle=DROPBG;c.beginPath();c.roundRect(bx,ty+26,w,54,27);c.fill();c.fillStyle=DROP;c.textAlign="center";c.fillText(txt,bx+w/2,ty+63);c.textAlign=al;ty+=70}
+ const items=[[t("bd"),String(x.beds)],[t("ba"),String(x.baths)],[t("sqft"),t("sqft_u",{n:x.sqft.toLocaleString("en-US")})],[t("ppsf"),usd(x.ppsf)],[t("close"),x.ready?t("ready"):fmtDate(x.coe)],[t("plan"),rtl?"\u2066"+x.plan+"\u2069 · "+t("story",{n:x.fl}):x.plan+" · "+t("story",{n:x.fl})]];
+ const gy=ty+50,gw=(W-2*P-24)/2,gh=150;
+ items.forEach((it,i)=>{const col=i%2,row=Math.floor(i/2);let bx=P+col*(gw+24);if(rtl)bx=W-bx-gw;const by=gy+row*(gh+22);
+  c.fillStyle=BG;c.beginPath();c.roundRect(bx,by,gw,gh,22);c.fill();
+  const tx=rtl?bx+gw-28:bx+28;c.textAlign=al;c.fillStyle=MUT;c.font="700 24px "+FF;c.fillText(it[0].toUpperCase(),tx,by+50,gw-56);
+  c.fillStyle=INK;fit(it[1],gw-56,44,900);c.fillText(it[1],tx,by+110)});
+ const fy=gy+3*(gh+22)+20;
+ c.fillStyle=NAVY;c.fillRect(0,fy,W,1240-fy);
+ c.fillStyle="#fff";c.textAlign=al;c.font="900 38px "+FF;c.fillText(CONTACT.name,X0,fy+62,W-2*P);
+ c.font="700 26px "+FF;c.fillStyle="#C9D3E6";c.fillText(CONTACT.role[lang],X0,fy+102,W-2*P);
+ c.fillStyle="#fff";c.font="700 30px "+FF;c.direction="ltr";c.textAlign=rtl?"right":"left";c.fillText(CONTACT.phone+"   ·   "+CONTACT.email,X0,fy+152,W-2*P);
+ c.direction=rtl?"rtl":"ltr";c.fillStyle="#9FB0CF";c.font="700 22px "+FF;c.fillText(t("upd",{d:rtl?"\u2066"+D.updated+"\u2069":D.updated}),X0,fy+192,W-2*P);
+ const H=Math.round(fy+220);const out=document.createElement("canvas");out.width=W;out.height=H;out.getContext("2d").drawImage(cv,0,0);
+ return new Promise((res,rej)=>out.toBlob(b=>b?res(b):rej(new Error("toBlob")),"image/png"))}
+function showCard(blob){const url=URL.createObjectURL(blob);const o=document.createElement("div");o.className="ov";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");
+ o.innerHTML='<div class="dlg card"><b>'+esc(t("card_h"))+'</b><p class="loc">'+esc(t("card_save"))+'</p><img alt="" src="'+url+'"><div class="row"><a class="btn" download="home-card.png" href="'+url+'">'+esc(t("card_dl"))+'</a><button class="btn" type="button">'+esc(t("card_x"))+'</button></div></div>';
+ const close=()=>{o.remove();URL.revokeObjectURL(url);document.removeEventListener("keydown",k)};const k=e=>{if(e.key==="Escape")close()};
+ document.addEventListener("keydown",k);o.onclick=e=>{if(e.target===o)close()};o.querySelector("button").onclick=close;document.body.appendChild(o);o.querySelector("button").focus()}
+async function copyCard(btn,x){const p=makeCardBlob(x);p.catch(()=>{});
+ try{await navigator.clipboard.write([new ClipboardItem({"image/png":p})]);btn.dataset.ok="true";btn.textContent="✓ "+t("card_ok");setTimeout(()=>{btn.dataset.ok="false";btn.textContent="🖼 "+t("card")},2500)}
+ catch(e){try{showCard(await p)}catch(e2){}}}
 function render(){
  document.documentElement.lang=lang;document.documentElement.dir=lang==="he"?"rtl":"ltr";
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lg===lang));
@@ -173,13 +200,10 @@ function render(){
  const monthCounts={};ALL.forEach(h=>{const k=mKey(h);monthCounts[k]=(monthCounts[k]||0)+1});
  const monthList=Object.keys(monthCounts).sort((a,b)=>a==="ready"?-1:b==="ready"?1:a<b?-1:1);S.months=S.months.filter(k=>monthCounts[k]);
  let h='<h1>'+esc(t("h1"))+'</h1><p class="sub">'+esc(t("sub"))+'</p><div class="note">'+esc(t("disc"))+'</div>';
- h+='<div class="card filters"><label class="srch">'+t("f_search")+'<input id="fq" type="search" list="commlist" autocomplete="off" value="'+esc(S.q)+'" placeholder="'+esc(t("f_search_ph"))+'"><datalist id="commlist">'+[...new Set(ALL.map(x=>x.comm))].sort().map(c=>'<option value="'+esc(c)+'">').join("")+'</datalist></label>'
- +'<label>'+t("f_price")+'<input id="fp" type="text" inputmode="numeric" autocomplete="off" list="pricelist" placeholder="'+esc(t("any"))+'" value="'+(S.price?usd(S.price):"")+'"><datalist id="pricelist">'+[200000,250000,300000,350000,400000,500000].map(v=>'<option value="'+usd(v)+'">').join("")+'</datalist></label>'
- +'<label>'+t("f_beds")+'<select id="fb">'+opts([[0,t("any")],[3,t("b3")],[4,t("b4")],[5,t("b5")]],S.beds)+'</select></label>'
-  +'<label>'+t("f_lease")+'<select id="fl">'+opts([[0,t("mo0")],[1,t("mo1")],[2,t("mo",{n:2})],[3,t("mo",{n:3})]],S.lease)+'</select></label>'
- +'<label>'+t("f_rent")+'<select id="fr">'+opts([[-10,t("r_low")],[0,t("r_mid")],[10,t("r_high")]],S.rent)+'</select></label>'
- +'<label>'+t("f_minY")+'<select id="fy">'+opts([[0,t("any")],[6,"6%+"],[7,"7%+"],[8,"8%+"],[9,"9%+"],[10,"10%+"]],S.minY)+'</select></label>'
- +'<label>'+t("f_sort")+'<select id="fs">'+opts([["yield",t("s_yield")],["y1",t("s_y1")],["price",t("s_price")],["rent",t("s_rent")],["soon",t("s_soon")]],S.sort)+'</select></label>'
+ h+='<div class="card filters"><label class="srch">'+esc(t("f_search"))+'<input id="fq" type="search" list="commlist" autocomplete="off" value="'+esc(S.q)+'" placeholder="'+esc(t("f_search_ph"))+'"><datalist id="commlist">'+[...new Set(ALL.map(x=>x.comm))].sort().map(c=>'<option value="'+esc(c)+'">').join("")+'</datalist></label>'
+ +'<label>'+esc(t("f_price"))+'<input id="fp" type="text" inputmode="numeric" autocomplete="off" list="pricelist" placeholder="'+esc(t("any"))+'" value="'+(S.price?usd(S.price):"")+'"><datalist id="pricelist">'+[200000,250000,300000,350000,400000,500000].map(v=>'<option value="'+usd(v)+'">').join("")+'</datalist></label>'
+ +'<label>'+esc(t("f_beds"))+'<select id="fb">'+opts([[0,t("any")],[3,t("b3")],[4,t("b4")],[5,t("b5")]],S.beds)+'</select></label>'
+ +'<label>'+esc(t("f_sort"))+'<select id="fs">'+opts([["price",t("s_price")],["price_hi",t("s_price_hi")],["soon",t("s_soon")],["sqft",t("s_sqft")],["ppsf",t("s_ppsf")]],S.sort)+'</select></label>'
  +'<details class="cities months"'+(S.months.length?" open":"")+'><summary>'+esc(S.months.length?t("months_n",{n:S.months.length}):t("months"))+'</summary><div class="loc">'+esc(t("m_hint"))+'</div><div class="chips">'
  +monthList.map(k=>'<button class="chip" data-month="'+k+'" aria-pressed="'+S.months.includes(k)+'">'+(S.months.includes(k)?"✓ ":"")+esc(k==="ready"?t("ready"):fmtMonth(new Date(+k.slice(0,4),+k.slice(5)-1,1)))+' <small>'+monthCounts[k]+'</small></button>').join("")
  +(S.months.length?'<button class="chip" id="clrm">'+esc(t("clear_m"))+'</button>':"")+'</div></details>'
@@ -189,34 +213,31 @@ function render(){
  h+='<div class="bar"><div class="count">'+t("n_homes",{n:rows.length.toLocaleString("en-US")})+' <small>· '+t("shown",{n:Math.min(S.limit,rows.length)})+'</small></div><button class="btn share" id="share" type="button">🔗 '+esc(t("share"))+'</button></div>';
  if(!rows.length)h+='<p class="status">'+esc(t("none"))+'</p>';
  rows.slice(0,S.limit).forEach(x=>{
-  h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX'+'</div>'
+  h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX</div>'
   +'<div class="loc">'+esc(t("beds",{b:x.beds,ba:x.baths,sf:x.sqft.toLocaleString("en-US")}))+'</div>'
   +'<div class="loc">'+esc(t("planline",{p:x.plan,fl:t("story",{n:x.fl})}))+'</div>'
-  +((x.drop||x.conf==="l")?'<div class="tags">'+(x.drop?'<span class="tag drop">▼ '+esc(t("dropped",{x:usd(x.drop-x.price)}))+'</span>':"")+(x.conf==="l"?'<span class="tag low">'+esc(t("low_conf"))+'</span>':"")+'</div>':"")+'</div>'
-  +'<div class="big"><div class="y">'+x.yld.toFixed(1)+'%</div><div class="yl">'+esc(t("yield"))+'</div></div>'
-  +'<div class="nums"><div><span>'+esc(t("price"))+'</span><b>'+usd(x.price)+'</b></div>'
-  +'<div><span>'+esc(t("rent"))+'</span><b>'+usd(x.rent)+'</b></div>'
-  +'<div><span>'+esc(t("close"))+'</span><b>'+(x.ready?esc(t("ready")):esc(fmtDate(x.coe)))+'</b></div>'
-  +'<div><span>'+esc(t("first"))+'</span><b>'+esc(fmtDate(x.rs))+'</b></div>'
-  +'<div><span>'+esc(t("y1"))+'</span><b>'+usd(x.y1)+'</b></div></div>'
-  +'<div class="links"><a href="https://www.google.com/maps/search/'+encodeURIComponent("Lennar at "+x.comm+", "+x.city+", TX")+'" target="_blank" rel="noopener">'+esc(t("view"))+'</a></div></article>'});
+  +(x.drop&&x.drop>x.price?'<div class="tags"><span class="tag drop">▼ '+esc(t("dropped",{x:usd(x.drop-x.price)}))+'</span></div>':"")+'</div>'
+  +'<div class="big"><div class="y">'+usd(x.price)+'</div><div class="yl">'+esc(t("price"))+'</div></div>'
+  +'<div class="nums"><div><span>'+esc(t("ppsf"))+'</span><b>'+usd(x.ppsf)+'</b></div>'
+  +'<div><span>'+esc(t("close"))+'</span><b>'+(x.ready?esc(t("ready")):esc(fmtDate(x.coe)))+'</b></div></div>'
+  +'<div class="links"><a href="https://www.google.com/maps/search/'+encodeURIComponent("Lennar at "+x.comm+", "+x.city+", TX")+'" target="_blank" rel="noopener">'+esc(t("view"))+'</a>'
+  +'<button class="btn cardbtn" type="button" data-card="'+x.i+'">🖼 '+esc(t("card"))+'</button></div></article>'});
  if(rows.length>S.limit)h+='<button class="more" id="more">'+esc(t("more",{n:Math.min(30,rows.length-S.limit)}))+'</button>';
- h+='<details class="card meth"><summary>'+esc(t("meth_h"))+'</summary><ul>'+t("meth").map(s=>"<li>"+esc(s)+"</li>").join("")+'</ul><b>'+esc(t("conf_h"))+'</b><table>'
- +Object.keys(R.cities).sort().map(c=>{const r=R.cities[c];return '<tr><td>'+esc(c)+'</td><td dir="ltr">3 bd '+usd(r[0])+' · 4 bd '+usd(r[1])+'</td><td>'+(r[2]==="l"?esc(t("conf_proxy",{x:r[3]})):esc(t("conf_city")))+'</td></tr>'}).join("")+'</table></details>';
  $("#app").innerHTML=h;
  $("#foot").innerHTML='<div class="contact"><b>'+esc(t("c_h"))+'</b><br>'+esc(t("c_p"))+'<br><br>'+CONTACT.name+'<br><a href="tel:+18307437270" dir="ltr">'+CONTACT.phone+'</a> · <a href="mailto:'+CONTACT.email+'" dir="ltr">'+CONTACT.email+'</a></div><div>'+esc(t("upd",{d:D.updated}))+' · <a href="'+SHEET_URL+'" target="_blank" rel="noopener">'+esc(t("sheet"))+'</a></div>';
  const bind=(id,k,num)=>{const e=$(id);if(e)e.onchange=()=>{S[k]=num?+e.value:e.value;S.limit=30;save();render()}};
  const fq=$("#fq");if(fq)fq.onpaste=e=>{const tx=(e.clipboardData||window.clipboardData).getData("text");if(/[\r\n]/.test(tx)){e.preventDefault();const ins=tx.split(/[\r\n]+/).map(x=>x.trim()).filter(Boolean).join(", ");fq.setRangeText(ins,fq.selectionStart,fq.selectionEnd,"end");fq.dispatchEvent(new Event("input"))}};
  if(fq)fq.oninput=()=>{S.q=fq.value;S.limit=30;save();const p=fq.selectionStart;render();const n=$("#fq");if(n){n.focus();try{n.setSelectionRange(p,p)}catch(e){}}};
- const fp=$("#fp");if(fp)fp.onchange=()=>{let v=fp.value.trim().toLowerCase().replace(/[$,\s]/g,"");let n=parseFloat(v)||0;if(/k$/.test(v))n*=1000;else if(/m$/.test(v))n*=1e6;S.price=Math.max(0,Math.round(n));S.limit=30;save();render()};bind("#fb","beds",1);bind("#fl","lease",1);bind("#fr","rent",1);bind("#fy","minY",1);bind("#fs","sort",0);
+ const fp=$("#fp");if(fp)fp.onchange=()=>{let v=fp.value.trim().toLowerCase().replace(/[$,\s]/g,"");let n=parseFloat(v)||0;if(/k$/.test(v))n*=1000;else if(/m$/.test(v))n*=1e6;S.price=Math.max(0,Math.round(n));S.limit=30;save();render()};bind("#fb","beds",1);bind("#fs","sort",0);
  document.querySelectorAll("[data-city]").forEach(b=>b.onclick=()=>{const c=b.dataset.city;S.cities=S.cities.includes(c)?S.cities.filter(x=>x!==c):S.cities.concat(c);S.limit=30;save();render();const d=$(".cities");if(d)d.open=true});
  document.querySelectorAll("[data-month]").forEach(b=>b.onclick=()=>{const k=b.dataset.month;S.months=S.months.includes(k)?S.months.filter(x=>x!==k):S.months.concat(k);S.limit=30;save();render()});
  const cm=$("#clrm");if(cm)cm.onclick=()=>{S.months=[];S.limit=30;save();render()};
  const cl=$("#clr");if(cl)cl.onclick=()=>{S.cities=[];save();render()};
  const sh=$("#share");if(sh)sh.onclick=()=>copyShare(sh);
+ document.querySelectorAll("[data-card]").forEach(b=>b.onclick=()=>{const x=ALL.find(z=>z.i===+b.dataset.card);if(x)copyCard(b,x)});
  const mr=$("#more");if(mr)mr.onclick=()=>{S.limit+=30;render()};
 }
 document.querySelectorAll("#lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lg;try{localStorage.setItem("ih_lang",lang)}catch(e){}render()});
-Promise.all([fetch("data.json",{cache:"no-store"}).then(r=>r.json()),fetch("rents.json",{cache:"no-store"}).then(r=>r.json())]).then(([d,r])=>{D=d;R=r;render()}).catch(()=>{$("#app").innerHTML='<p class="status">Could not load data.</p>'});
+fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{D=d;render()}).catch(()=>{$("#app").innerHTML='<p class="status">Could not load data.</p>'});
 render();
 </script></body></html>
