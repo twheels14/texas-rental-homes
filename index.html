@@ -66,7 +66,7 @@ const T={
 en:{who:"New Home Consultant, Lennar",h1:"Investment Property Search",
 sub:"New-construction homes from Lennar in Texas. See estimated rent, gross yield and how long until rent starts. Everything is priced in US dollars, with no loan needed.",
 disc:"Rent figures are estimates from public rent averages by city and bedroom count. They are not guaranteed. Yields are gross: before property tax, insurance, management and repairs. Confirm rent with a local property manager before buying.",
-f_search:"Search community, city or address",f_search_ph:"e.g. Brookmill",f_price:"Max price",f_beds:"Bedrooms",f_close:"Closing within",f_lease:"Time to find a tenant",f_rent:"Rent assumption",f_sort:"Sort by",f_minY:"Min. gross yield",
+f_search:"Search community, city or address (separate several with commas)",f_search_ph:"e.g. Brookmill, 123 Main St, Kyle",f_price:"Max price",f_beds:"Bedrooms",f_close:"Closing within",f_lease:"Time to find a tenant",f_rent:"Rent assumption",f_sort:"Sort by",f_minY:"Min. gross yield",
 any:"Any",b3:"3+",b4:"4+",b5:"5+",mo:"{n} months",mo1:"1 month",mo0:"Right away",mo_any:"No limit",
 r_low:"Cautious (−10%)",r_mid:"Market average",r_high:"Optimistic (+10%)",
 s_yield:"Highest gross yield",s_y1:"Highest first-year income",s_price:"Lowest price",s_rent:"Highest rent",s_soon:"Soonest closing",
@@ -83,7 +83,7 @@ share:"Share these results",copied:"Link copied",copy_fail:"Copy this link:",she
 es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Búsqueda de propiedades de inversión",
 sub:"Casas nuevas de Lennar en Texas. Vea la renta estimada, el rendimiento bruto y cuánto falta para que empiece la renta. Todo en dólares, sin necesidad de préstamo.",
 disc:"Las rentas son estimaciones basadas en promedios públicos por ciudad y número de recámaras. No están garantizadas. El rendimiento es bruto: antes de impuestos, seguro, administración y reparaciones. Confirme la renta con un administrador local antes de comprar.",
-f_search:"Buscar comunidad, ciudad o dirección",f_search_ph:"p. ej. Brookmill",f_price:"Precio máximo",f_beds:"Recámaras",f_close:"Cierre dentro de",f_lease:"Tiempo para hallar inquilino",f_rent:"Supuesto de renta",f_sort:"Ordenar por",f_minY:"Rend. bruto mínimo",
+f_search:"Buscar comunidad, ciudad o dirección (separe varias con comas)",f_search_ph:"p. ej. Brookmill, 123 Main St, Kyle",f_price:"Precio máximo",f_beds:"Recámaras",f_close:"Cierre dentro de",f_lease:"Tiempo para hallar inquilino",f_rent:"Supuesto de renta",f_sort:"Ordenar por",f_minY:"Rend. bruto mínimo",
 any:"Cualquiera",b3:"3+",b4:"4+",b5:"5+",mo:"{n} meses",mo1:"1 mes",mo0:"De inmediato",mo_any:"Sin límite",
 r_low:"Cauteloso (−10%)",r_mid:"Promedio del mercado",r_high:"Optimista (+10%)",
 s_yield:"Mayor rendimiento bruto",s_y1:"Mayor ingreso del primer año",s_price:"Menor precio",s_rent:"Mayor renta",s_soon:"Cierre más próximo",
@@ -100,7 +100,7 @@ share:"Compartir estos resultados",copied:"Enlace copiado",copy_fail:"Copie este
 he:{who:"יועץ בתים חדשים, Lennar",h1:"חיפוש נכסי השקעה",
 sub:"בתים חדשים של Lennar בטקסס. ראו שכירות משוערת, תשואה ברוטו וכמה זמן עד שהשכירות מתחילה. הכול בדולרים, ללא צורך במשכנתא.",
 disc:"נתוני השכירות הם הערכות על בסיס ממוצעי שכירות פומביים לפי עיר ומספר חדרי שינה. אין ערובה להם. התשואה ברוטו: לפני מס נכס, ביטוח, ניהול ותיקונים. מומלץ לאמת שכירות מול מנהל נכסים מקומי לפני הרכישה.",
-f_search:"חיפוש שכונה, עיר או כתובת",f_search_ph:"למשל Brookmill",f_price:"מחיר מקסימלי",f_beds:"חדרי שינה",f_close:"סגירה תוך",f_lease:"זמן למציאת שוכר",f_rent:"הנחת שכירות",f_sort:"מיון לפי",f_minY:"תשואה ברוטו מינימלית",
+f_search:"חיפוש שכונה, עיר או כתובת (אפשר כמה, מופרדים בפסיקים)",f_search_ph:"למשל Brookmill, 123 Main St, Kyle",f_price:"מחיר מקסימלי",f_beds:"חדרי שינה",f_close:"סגירה תוך",f_lease:"זמן למציאת שוכר",f_rent:"הנחת שכירות",f_sort:"מיון לפי",f_minY:"תשואה ברוטו מינימלית",
 any:"הכול",b3:"3+",b4:"4+",b5:"5+",mo:"{n} חודשים",mo1:"חודש",mo0:"מיד",mo_any:"ללא הגבלה",
 r_low:"זהיר (−10%)",r_mid:"ממוצע שוק",r_high:"אופטימי (+10%)",
 s_yield:"תשואה ברוטו הגבוהה ביותר",s_y1:"הכנסה גבוהה בשנה הראשונה",s_price:"המחיר הנמוך ביותר",s_rent:"השכירות הגבוהה ביותר",s_soon:"הסגירה הקרובה ביותר",
@@ -128,7 +128,7 @@ try{const o=JSON.parse(sessionStorage.getItem("ih_s")||"null");if(o)S=Object.ass
 const DEF={price:0,beds:3,months:[],lease:1,rent:0,sort:"yield",minY:0,cities:[],q:""};
 function fromHash(){try{const h=location.hash.replace(/^#/,"");if(!h)return false;const p=new URLSearchParams(h);if(![...p.keys()].length)return false;
  const n=(k,d)=>{const v=parseFloat(p.get(k));return isFinite(v)?v:d};
- const o=Object.assign({},DEF,{price:Math.max(0,n("p",0)),beds:n("b",3),lease:n("l",1),rent:n("r",0),minY:n("y",0),sort:p.get("s")||"yield",q:(p.get("q")||"").slice(0,80),
+ const o=Object.assign({},DEF,{price:Math.max(0,n("p",0)),beds:n("b",3),lease:n("l",1),rent:n("r",0),minY:n("y",0),sort:p.get("s")||"yield",q:(p.get("q")||"").slice(0,400),
   months:(p.get("m")||"").split(",").filter(x=>/^(ready|\d{4}-\d{2})$/.test(x)),cities:(p.get("c")||"").split("|").filter(Boolean)});
  if(!["yield","y1","price","rent","soon"].includes(o.sort))o.sort="yield";
  S=Object.assign(S,o,{limit:30});const g=p.get("g");if(g&&T[g])lang=g;return true}catch(e){return false}}
@@ -159,7 +159,8 @@ function prep(){if(!Object.keys(REF).length){const g={};D.h.forEach(h=>{const b=
  const closeM=ready?0:monthsBetween(TODAY,coe);
  const monthsPaying=Math.max(0,12-S.lease);
  return {i,comm:comm[0],city,addr:h[2],plan:h[3],fl:h[4],beds:h[5],baths:h[6],sqft:h[7],price,coe,ready,closeM,rent,rs,yld:rent*12/price*100,y1:rent*monthsPaying,drop:h[11],conf:R.cities[city][2],proxy:R.cities[city][3]}}).filter(Boolean)}
-function filtered(){let a=ALL.filter(h=>(!S.price||h.price<=S.price)&&h.beds>=S.beds&&(!S.months.length||S.months.includes(mKey(h)))&&h.yld>=S.minY&&(!S.cities.length||S.cities.includes(h.city))&&(!S.q||(h.comm+" "+h.city+" "+h.addr).toLowerCase().includes(S.q.trim().toLowerCase())));
+function qTerms(q){return String(q||"").split(/[,;\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean)}
+function filtered(){const qs=qTerms(S.q);let a=ALL.filter(h=>(!S.price||h.price<=S.price)&&h.beds>=S.beds&&(!S.months.length||S.months.includes(mKey(h)))&&h.yld>=S.minY&&(!S.cities.length||S.cities.includes(h.city))&&(!qs.length||qs.some(w=>(h.comm+" "+h.city+" "+h.addr).toLowerCase().includes(w))));
  const f={yield:(x,y)=>y.yld-x.yld,y1:(x,y)=>y.y1/y.price-x.y1/x.price,price:(x,y)=>x.price-y.price,rent:(x,y)=>y.rent-x.rent,soon:(x,y)=>x.coe-y.coe}[S.sort];return a.sort(f)}
 function opts(list,cur){return list.map(([v,l])=>'<option value="'+v+'"'+(String(cur)===String(v)?" selected":"")+">"+esc(l)+"</option>").join("")}
 function render(){
@@ -205,7 +206,8 @@ function render(){
  $("#app").innerHTML=h;
  $("#foot").innerHTML='<div class="contact"><b>'+esc(t("c_h"))+'</b><br>'+esc(t("c_p"))+'<br><br>'+CONTACT.name+'<br><a href="tel:+18307437270" dir="ltr">'+CONTACT.phone+'</a> · <a href="mailto:'+CONTACT.email+'" dir="ltr">'+CONTACT.email+'</a></div><div>'+esc(t("upd",{d:D.updated}))+' · <a href="'+SHEET_URL+'" target="_blank" rel="noopener">'+esc(t("sheet"))+'</a></div>';
  const bind=(id,k,num)=>{const e=$(id);if(e)e.onchange=()=>{S[k]=num?+e.value:e.value;S.limit=30;save();render()}};
- const fq=$("#fq");if(fq)fq.oninput=()=>{S.q=fq.value;S.limit=30;save();const p=fq.selectionStart;render();const n=$("#fq");if(n){n.focus();try{n.setSelectionRange(p,p)}catch(e){}}};
+ const fq=$("#fq");if(fq)fq.onpaste=e=>{const tx=(e.clipboardData||window.clipboardData).getData("text");if(/[\r\n]/.test(tx)){e.preventDefault();const ins=tx.split(/[\r\n]+/).map(x=>x.trim()).filter(Boolean).join(", ");fq.setRangeText(ins,fq.selectionStart,fq.selectionEnd,"end");fq.dispatchEvent(new Event("input"))}};
+ if(fq)fq.oninput=()=>{S.q=fq.value;S.limit=30;save();const p=fq.selectionStart;render();const n=$("#fq");if(n){n.focus();try{n.setSelectionRange(p,p)}catch(e){}}};
  const fp=$("#fp");if(fp)fp.onchange=()=>{let v=fp.value.trim().toLowerCase().replace(/[$,\s]/g,"");let n=parseFloat(v)||0;if(/k$/.test(v))n*=1000;else if(/m$/.test(v))n*=1e6;S.price=Math.max(0,Math.round(n));S.limit=30;save();render()};bind("#fb","beds",1);bind("#fl","lease",1);bind("#fr","rent",1);bind("#fy","minY",1);bind("#fs","sort",0);
  document.querySelectorAll("[data-city]").forEach(b=>b.onclick=()=>{const c=b.dataset.city;S.cities=S.cities.includes(c)?S.cities.filter(x=>x!==c):S.cities.concat(c);S.limit=30;save();render();const d=$(".cities");if(d)d.open=true});
  document.querySelectorAll("[data-month]").forEach(b=>b.onclick=()=>{const k=b.dataset.month;S.months=S.months.includes(k)?S.months.filter(x=>x!==k):S.months.concat(k);S.limit=30;save();render()});
