@@ -44,6 +44,7 @@ h1{font-size:clamp(28px,5.5vw,40px);line-height:1.1;margin:8px 0 8px;font-weight
 .tag{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;margin-inline-start:6px}
 .tag.drop{background:var(--drop-soft);color:var(--drop)}.tag.low{background:var(--gold);color:var(--gold-ink)}.tag.ok{background:var(--good-soft);color:var(--good)}
 .links{grid-column:1/-1;font-size:14px;color:var(--muted)}
+.share{display:inline-flex;align-items:center;gap:8px}.share[data-ok=true]{border-color:var(--good);color:var(--good)}
 .more{display:block;width:100%;min-height:52px;font-size:16px;font-weight:900;color:var(--teal-ink);border:2px solid var(--line);background:var(--surface);border-radius:14px}
 .foot{margin-top:24px;font-size:14px;color:var(--muted);line-height:1.5}
 .contact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--ink);font-size:16px;margin-bottom:12px}
@@ -78,7 +79,7 @@ meth_h:"How the numbers are calculated",
 meth:["Estimated rent: average monthly rent for houses of that bedroom count in the city (Rentometer, Oct 2025 – Jun 2026), then adjusted by the rent assumption you choose. Homes with 5 or more bedrooms use the 4+ bedroom figure plus 12%. Rent is also scaled up or down (at most 12% up, 15% down) for homes larger or smaller than the typical home with the same bedrooms.","Gross yield: estimated annual rent divided by price. Taxes, insurance, vacancy after the first lease, management and repairs are not included.","Closing: the estimated closing date for each home. Rent starts after closing plus the time you pick to find a tenant.","Income, first 12 months: rent for the months after rent starts, within 12 months of closing."],
 conf_h:"Where rent data comes from",conf_city:"City data",conf_proxy:"Estimated from nearby: {x}",
 c_h:"Ready to look closer?",c_p:"When you are ready, I can connect you with the US realtor I work with to buy.",
-sheet:"View the full inventory spreadsheet ↗",upd:"Inventory updated {d}"},
+share:"Share these results",copied:"Link copied",copy_fail:"Copy this link:",sheet:"View the full inventory spreadsheet ↗",upd:"Inventory updated {d}"},
 es:{who:"Consultor de Casas Nuevas, Lennar",h1:"Búsqueda de propiedades de inversión",
 sub:"Casas nuevas de Lennar en Texas. Vea la renta estimada, el rendimiento bruto y cuánto falta para que empiece la renta. Todo en dólares, sin necesidad de préstamo.",
 disc:"Las rentas son estimaciones basadas en promedios públicos por ciudad y número de recámaras. No están garantizadas. El rendimiento es bruto: antes de impuestos, seguro, administración y reparaciones. Confirme la renta con un administrador local antes de comprar.",
@@ -95,7 +96,7 @@ meth_h:"Cómo se calculan los números",
 meth:["Renta estimada: promedio mensual de casas con ese número de recámaras en la ciudad (Rentometer, oct 2025 – jun 2026), ajustado según el supuesto que elija. Las casas de 5 o más recámaras usan la cifra de 4+ más 12%. La renta también se ajusta según el tamaño de la casa frente a una típica con las mismas recámaras (máx. 12% más, 15% menos).","Rendimiento bruto: renta anual estimada dividida entre el precio. No incluye impuestos, seguro, vacancia posterior, administración ni reparaciones.","Cierre: fecha estimada de cierre de cada casa. La renta empieza después del cierre más el tiempo que elija para hallar inquilino.","Ingreso de los primeros 12 meses: renta de los meses posteriores al inicio de renta, dentro de 12 meses desde el cierre."],
 conf_h:"Origen de los datos de renta",conf_city:"Datos de la ciudad",conf_proxy:"Estimado de zona cercana: {x}",
 c_h:"¿Listo para ver más?",c_p:"Cuando esté listo, puedo conectarlo con el agente inmobiliario en EE. UU. con quien trabajo para comprar.",
-sheet:"Ver la hoja de inventario completa ↗",upd:"Inventario actualizado {d}"},
+share:"Compartir estos resultados",copied:"Enlace copiado",copy_fail:"Copie este enlace:",sheet:"Ver la hoja de inventario completa ↗",upd:"Inventario actualizado {d}"},
 he:{who:"יועץ בתים חדשים, Lennar",h1:"חיפוש נכסי השקעה",
 sub:"בתים חדשים של Lennar בטקסס. ראו שכירות משוערת, תשואה ברוטו וכמה זמן עד שהשכירות מתחילה. הכול בדולרים, ללא צורך במשכנתא.",
 disc:"נתוני השכירות הם הערכות על בסיס ממוצעי שכירות פומביים לפי עיר ומספר חדרי שינה. אין ערובה להם. התשואה ברוטו: לפני מס נכס, ביטוח, ניהול ותיקונים. מומלץ לאמת שכירות מול מנהל נכסים מקומי לפני הרכישה.",
@@ -112,7 +113,7 @@ meth_h:"איך המספרים מחושבים",
 meth:["שכירות משוערת: ממוצע שכירות חודשית לבתים עם אותו מספר חדרי שינה בעיר (Rentometer, אוקטובר 2025 – יוני 2026), ומותאם להנחה שבחרתם. בתים עם 5 חדרי שינה ומעלה מחושבים לפי נתון 4+ ועוד 12%. השכירות מותאמת גם לגודל הבית לעומת בית טיפוסי עם אותו מספר חדרים (עד 12% יותר או 15% פחות).","תשואה ברוטו: שכירות שנתית משוערת חלקי המחיר. לא כולל מס נכס, ביטוח, תקופות ללא שוכר לאחר החוזה הראשון, ניהול ותיקונים.","סגירה: תאריך הסגירה המשוער של כל בית. השכירות מתחילה אחרי הסגירה ועוד הזמן שבחרתם למציאת שוכר.","הכנסה ב-12 חודשים ראשונים: שכירות עבור החודשים שאחרי תחילת השכירות, בתוך 12 חודשים מהסגירה."],
 conf_h:"מקור נתוני השכירות",conf_city:"נתוני העיר",conf_proxy:"הערכה לפי אזור סמוך: {x}",
 c_h:"מוכנים להעמיק?",c_p:"כשתהיו מוכנים, אפשר לחבר אתכם למתווך האמריקאי שאיתו אני עובד לצורך הרכישה.",
-sheet:"לגיליון המלאי המלא ↗",upd:"המלאי עודכן {d}"}
+share:"שתפו את התוצאות",copied:"הקישור הועתק",copy_fail:"העתיקו את הקישור:",sheet:"לגיליון המלאי המלא ↗",upd:"המלאי עודכן {d}"}
 };
 let lang="he";try{lang=localStorage.getItem("ih_lang")||((navigator.language||"en").slice(0,2))}catch(e){}
 if(!T[lang])lang="en";
@@ -124,7 +125,22 @@ const usd=n=>"$"+Math.round(n).toLocaleString("en-US");
 const loc={en:"en-US",es:"es-US",he:"he-IL"};
 let D=null,R=null,S={price:0,beds:3,months:[],lease:1,rent:0,sort:"yield",minY:0,cities:[],q:"",limit:30};
 try{const o=JSON.parse(sessionStorage.getItem("ih_s")||"null");if(o)S=Object.assign(S,o,{limit:30});if(!Array.isArray(S.months))S.months=[]}catch(e){}
+const DEF={price:0,beds:3,months:[],lease:1,rent:0,sort:"yield",minY:0,cities:[],q:""};
+function fromHash(){try{const h=location.hash.replace(/^#/,"");if(!h)return false;const p=new URLSearchParams(h);if(![...p.keys()].length)return false;
+ const n=(k,d)=>{const v=parseFloat(p.get(k));return isFinite(v)?v:d};
+ const o=Object.assign({},DEF,{price:Math.max(0,n("p",0)),beds:n("b",3),lease:n("l",1),rent:n("r",0),minY:n("y",0),sort:p.get("s")||"yield",q:(p.get("q")||"").slice(0,80),
+  months:(p.get("m")||"").split(",").filter(x=>/^(ready|\d{4}-\d{2})$/.test(x)),cities:(p.get("c")||"").split("|").filter(Boolean)});
+ if(!["yield","y1","price","rent","soon"].includes(o.sort))o.sort="yield";
+ S=Object.assign(S,o,{limit:30});const g=p.get("g");if(g&&T[g])lang=g;return true}catch(e){return false}}
+function shareUrl(){const p=new URLSearchParams();
+ if(S.price)p.set("p",S.price);if(S.beds!==DEF.beds)p.set("b",S.beds);if(S.lease!==DEF.lease)p.set("l",S.lease);if(S.rent)p.set("r",S.rent);if(S.minY)p.set("y",S.minY);
+ if(S.sort!==DEF.sort)p.set("s",S.sort);if(S.q&&S.q.trim())p.set("q",S.q.trim());if(S.months.length)p.set("m",S.months.join(","));if(S.cities.length)p.set("c",S.cities.join("|"));
+ p.set("g",lang);return location.origin+location.pathname+"#"+p.toString()}
+async function copyShare(btn){const u=shareUrl();let ok=false;
+ try{await navigator.clipboard.writeText(u);ok=true}catch(e){try{const a=document.createElement("textarea");a.value=u;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();ok=document.execCommand("copy");a.remove()}catch(e2){}}
+ if(ok){btn.dataset.ok="true";btn.textContent="✓ "+t("copied");setTimeout(()=>{btn.dataset.ok="false";btn.textContent="🔗 "+t("share")},2500)}else{window.prompt(t("copy_fail"),u)}}
 const save=()=>{try{sessionStorage.setItem("ih_s",JSON.stringify(S))}catch(e){}};
+fromHash();
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 function dOf(n){return new Date(Math.floor(n/10000),Math.floor(n/100)%100-1,n%100)}
 function monthsBetween(a,b){return (b-a)/86400000/30.44}
@@ -169,7 +185,7 @@ function render(){
  +'<details class="cities"><summary>'+esc(S.cities.length?t("cities_n",{n:S.cities.length}):t("cities"))+'</summary><div class="chips">'
  +cityList.map(c=>'<button class="chip" data-city="'+esc(c)+'" aria-pressed="'+S.cities.includes(c)+'">'+esc(c)+' <small>'+cityCounts[c]+'</small></button>').join("")
  +(S.cities.length?'<button class="chip" id="clr">'+esc(t("clear"))+'</button>':"")+'</div></details></div>';
- h+='<div class="bar"><div class="count">'+t("n_homes",{n:rows.length.toLocaleString("en-US")})+' <small>· '+t("shown",{n:Math.min(S.limit,rows.length)})+'</small></div></div>';
+ h+='<div class="bar"><div class="count">'+t("n_homes",{n:rows.length.toLocaleString("en-US")})+' <small>· '+t("shown",{n:Math.min(S.limit,rows.length)})+'</small></div><button class="btn share" id="share" type="button">🔗 '+esc(t("share"))+'</button></div>';
  if(!rows.length)h+='<p class="status">'+esc(t("none"))+'</p>';
  rows.slice(0,S.limit).forEach(x=>{
   h+='<article class="card home"><div><div class="addr">'+esc(x.addr)+'</div><div class="loc">'+esc(x.comm)+' · '+esc(x.city)+', TX'+'</div>'
@@ -195,6 +211,7 @@ function render(){
  document.querySelectorAll("[data-month]").forEach(b=>b.onclick=()=>{const k=b.dataset.month;S.months=S.months.includes(k)?S.months.filter(x=>x!==k):S.months.concat(k);S.limit=30;save();render()});
  const cm=$("#clrm");if(cm)cm.onclick=()=>{S.months=[];S.limit=30;save();render()};
  const cl=$("#clr");if(cl)cl.onclick=()=>{S.cities=[];save();render()};
+ const sh=$("#share");if(sh)sh.onclick=()=>copyShare(sh);
  const mr=$("#more");if(mr)mr.onclick=()=>{S.limit+=30;render()};
 }
 document.querySelectorAll("#lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lg;try{localStorage.setItem("ih_lang",lang)}catch(e){}render()});
